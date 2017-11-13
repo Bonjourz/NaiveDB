@@ -5,8 +5,8 @@ LDFLAGS = -lm
 naivedb : main.o Client.o DB.o BTree.o
 	${CC} -o $@ $^ 
 
-BTree.o : BTree.h
-	${CC} ${CFLAGS} -c BTree.cpp
+BTree.o : BTree.cpp BTree.h
+	${CC} ${CFLAGS} -c $<
 
 Client.o : Client.cpp Client.h
 	${CC} ${CFLAGS} -c $<
