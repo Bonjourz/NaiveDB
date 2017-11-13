@@ -273,7 +273,7 @@ void Client::testForCorrectness(const int& nrec) {
 			cout << "Fetch error1!" << endl;
 
 		if (result != value) {
-			cout << "Fetch error2!" << endl;
+			cout << "Fetch error2!" << value << result << "a";
 		}
 
 		if (!db->deleteRecord(key))

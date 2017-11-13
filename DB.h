@@ -14,6 +14,8 @@ typedef struct {
 class DB
 {
 public:
+	DB();
+	
 	DB(string fileName);
 
 	~DB();

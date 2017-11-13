@@ -3,15 +3,16 @@
 #include <cstring>
 #include <iostream>
 
+DB::DB() {}
 
-DB::DB(string fileName = "Database") {
+DB::DB(string fileName) {
 	// Open the file
 	string idxname = fileName + "idx.txt";
 	string datname = fileName + "dat.txt";
 	string fragname = fileName + "frag.txt";
-	fopen_s(&idxFile, idxname.c_str(), "rb+");
-	fopen_s(&datFile, datname.c_str(), "rb+");
-	fopen_s(&fragFile, fragname.c_str(), "rb+");
+	idxFile = fopen(idxname.c_str(), "rb+");
+	datFile = fopen(datname.c_str(), "rb+");
+	fragFile = fopen(fragname.c_str(), "rb+");
 	cacheHit = 0;
 }
 
@@ -44,9 +45,9 @@ DB::~DB() {
 
 void DB::clearDat() {
 	fclose(datFile);
-	fopen_s(&datFile, "databasedat.txt", "w+");
+	datFile = fopen("databasedat.txt", "w+");
 	fclose(datFile);
-	fopen_s(&datFile, "databasedat.txt", "rb+");
+	datFile = fopen("databasedat.txt", "rb+");
 }
 
 void DB::loadFromFile() {
@@ -172,9 +173,9 @@ bool DB::fetchRecord(const KEYTYPE& key, VALUETYPE& value) {
 	fseek(datFile, offset * recordSize, SEEK_SET);
 	string result = "";
 	for (int i = 0; i < recordSize; i++) {
-		char ch;
+		char ch = 0;
 		fread((char*)(&ch), 1, 1, datFile);
-		if (ch != NULL)
+		if (ch != 0)
 			result += ch;
 
 		else
@@ -242,7 +243,7 @@ void DB::updateDataFile(const OFFSET& offset, const VALUETYPE& value) {
 	}
 
 	for (; index < recordSize; index++) {
-		char ch = NULL;
+		char ch = 0;
 		fwrite((char*)(&ch), 1, 1, datFile);
 	}
 }
@@ -265,6 +266,7 @@ bool DB::deleteRecord(const KEYTYPE& key) {
 	// Update the fragment
 	fragNum++;
 	fragement.insert(offset);
+	return true;
 }
 
 bool DB::modify(const KEYTYPE& key, const VALUETYPE& value) {
